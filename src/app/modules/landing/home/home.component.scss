@@ -1,0 +1,175 @@
+
+@import "~swiper/scss";
+@import "~swiper/css/free-mode";
+@import "~swiper/css/navigation";
+@import "~swiper/css/thumbs";
+.swiper {
+  width: 100%;
+  height: 100%;
+}
+
+.swiper-slide {
+  text-align: center;
+  font-size: 18px;
+  background: #fff;
+
+  /* Center slide text vertically */
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+}
+
+.swiper-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+body {
+  background: #000;
+  color: #000;
+}
+
+.swiper {
+  width: 100%;
+  height: 300px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.swiper-slide {
+  background-size: cover;
+  background-position: center;
+}
+
+.mySwiper2 {
+  height: 80%;
+  width: 100%;
+}
+
+.mySwiper {
+  height: 20%;
+  box-sizing: border-box;
+  padding: 10px 0;
+}
+
+.mySwiper .swiper-slide {
+  width: 25%;
+  height: 100%;
+  opacity: 0.4;
+}
+
+.mySwiper .swiper-slide-thumb-active {
+  opacity: 1;
+}
+
+.swiper-slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.parent{
+
+    @apply flex flex-col flex-auto min-w-0 relative;
+
+    .lang{
+        @apply  top-4 right-140 w-full h-full z-99999 absolute;
+
+    }
+
+    .overlay {
+        position: absolute;
+        top: 45%;
+        right: 70% !important;
+        transform: translateY(-50%);
+        .title {
+            color:#101d32!important;
+              font-size: 30px;
+              font-weight: 600;
+              margin-bottom: 10px !important;
+              align-content: space-between;
+            //   margin-left:20% !important;
+         }
+
+        .btn{
+            font-size: 20px;
+            background: beige !important;
+            color: #101d32 !important ;
+            border: 1px solid #101d32;
+        }
+        .btn:hover {
+            background: #101d32 !important;
+            color: beige !important;
+
+        }
+      }
+      .prim{
+          background: beige !important;
+          color: #101d32 !important;
+          font-size: 20px;
+          margin-left: 50% !important;
+          margin-top: 3%;
+
+      }
+      .prim:hover {
+        background: #101d32 !important;
+        color: beige !important;
+
+    }
+    .card{
+        @apply flex  w-full max-h-90   p-8  space-x-12 space-y-reverse;
+
+    }
+    .container {
+        position: relative;
+        width:100%;
+      }
+
+      .image {
+        opacity: 1;
+        display: block;
+        width:100%;
+        height: 75%;
+        transition: .5s ease;
+        backface-visibility: hidden;
+      }
+
+      .middle {
+        transition: .5s ease;
+        opacity: 0;
+        position: absolute;
+        top: 30%;
+        left: 43%;
+        transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+      }
+
+      .container:hover .image {
+        opacity: 0.3;
+      }
+
+      .container:hover .middle {
+        opacity: 1;
+      }
+
+      .text {
+        font-size:12px;
+        display: inline;
+        margin-right: 190px;
+        font-weight:600;
+      }
+}
+
+
+
