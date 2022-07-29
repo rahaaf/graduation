@@ -12,11 +12,11 @@
     <ng-container fuseVerticalNavigationContentHeader>
         <div class="flex items-center w-full p-4 pl-6">
             <!-- Logo -->
-            <div class="flex items-center justify-center">
+            <!-- <div class="flex items-center justify-center">
                 <img
                     class="w-8"
                     src="assets/images/logo/3.png">
-            </div>
+            </div> -->
             <!-- Components -->
             <div class="flex items-center ml-auto">
                 <notifications></notifications>
@@ -24,7 +24,7 @@
             </div>
         </div>
         <!-- User -->
-        <div class="flex flex-col items-center w-full p-4">
+        <!-- <div class="flex flex-col items-center w-full p-4">
             <div class="relative w-24 h-24">
                 <img
                     class="w-full h-full rounded-full"
@@ -44,7 +44,7 @@
                     {{user.email}}
                 </div>
             </div>
-        </div>
+        </div> -->
     </ng-container>
     <!-- Navigation footer hook -->
     <ng-container fuseVerticalNavigationContentFooter>
@@ -76,7 +76,7 @@
     </div>
 
     <!-- Content -->
-    <div class="flex flex-col flex-auto">
+    <div class=" flex flex-col flex-auto">
         <!-- *ngIf="true" hack is required here for router-outlet to work correctly.
              Otherwise, layout changes won't be registered and the view won't be updated! -->
         <router-outlet *ngIf="true"></router-outlet>
