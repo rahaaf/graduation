@@ -13,7 +13,7 @@ export class MarkerService {
     private popup: PopUpService) {
   }
 
-  makeCapitalMarkers(map: L.map): void {
+  makeCapitalMarkers(map: L.Map): void {
     this.http.get(this.capitals).subscribe((res: any) => {
       for (const c of res.features) {
         const lon = c.geometry.coordinates[0];
@@ -23,7 +23,7 @@ export class MarkerService {
       }
     });
   }
-  makeCapitalCircleMarkers(map: L.map): void {
+  makeCapitalCircleMarkers(map: L.Map): void {
     this.http.get(this.capitals).subscribe((res: any) => {
         const maxPop = Math.max(...res.features.map(x => x.properties.population), 0);
       for (const c of res.features) {
