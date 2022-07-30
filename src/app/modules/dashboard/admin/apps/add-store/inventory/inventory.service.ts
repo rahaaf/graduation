@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, filter, map, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
 import {  InventoryCoordinates, InventoryGovernorate, InventoryPagination, InventoryProduct } from 'app/modules/dashboard/admin/apps/add-store/inventory/inventory.types';
+import { Contact } from '../../contacts/contacts.types';
 
 @Injectable({
     providedIn: 'root'
@@ -14,7 +15,7 @@ export class InventoryService
     private _pagination: BehaviorSubject<InventoryPagination | null> = new BehaviorSubject(null);
     private _product: BehaviorSubject<InventoryProduct | null> = new BehaviorSubject(null);
     private _products: BehaviorSubject<InventoryProduct[] | null> = new BehaviorSubject(null);
-
+    private _contact: BehaviorSubject<Contact[] | null> = new BehaviorSubject(null);
     /**
      * Constructor
      */
@@ -41,6 +42,13 @@ export class InventoryService
     {
         return this._governorate.asObservable();
     }
+      /**
+       *   * Getter for contacts
+       *   */
+       get _contact$(): Observable<Contact[]>
+       {
+           return this._contact.asObservable();
+       }
 
     /**
      * Getter for pagination
@@ -94,6 +102,17 @@ export class InventoryService
             })
         );
     }
+     /**
+      *    * Get categories
+      *    */
+      getContacts(): Observable<Contact[]>
+      {
+          return this._httpClient.get<Contact[]>('api/apps/contacts/all').pipe(
+              tap((categories) => {
+                  this._contact.next(categories);
+              })
+          );
+      }
 
     /**
      * Get products

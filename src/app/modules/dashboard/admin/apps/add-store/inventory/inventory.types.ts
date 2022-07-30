@@ -2,6 +2,7 @@ export interface InventoryProduct
 {
     id: string;
     governorate?: string;
+    contact?: string;
     name: string;
     address: string;
     coordinates: number;

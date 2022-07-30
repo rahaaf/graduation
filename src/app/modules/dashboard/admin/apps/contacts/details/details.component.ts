@@ -6,10 +6,9 @@ import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { MatDrawerToggleResult } from '@angular/material/sidenav';
 import { debounceTime, Subject, takeUntil } from 'rxjs';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
-import { Contact, Country, Tag } from 'app/modules/dashboard/admin/apps/contacts/contacts.types';
-import { ContactsListComponent } from 'app/modules/dashboard/admin/apps/contacts/list/list.component';
-import { ContactsService } from 'app/modules/dashboard/admin/apps/contacts/contacts.service';
-import { InventoryProduct } from '../../add-store/inventory/inventory.types';
+import { ContactsService } from '../contacts.service';
+import { Contact, Country } from '../contacts.types';
+import { ContactsListComponent } from '../list/list.component';
 
 @Component({
     selector       : 'contacts-details',
@@ -20,13 +19,9 @@ import { InventoryProduct } from '../../add-store/inventory/inventory.types';
 export class ContactsDetailsComponent implements OnInit, OnDestroy
 {
     @ViewChild('avatarFileInput') private _avatarFileInput: ElementRef;
-    @ViewChild('tagsPanel') private _tagsPanel: TemplateRef<any>;
-    @ViewChild('tagsPanelOrigin') private _tagsPanelOrigin: ElementRef;
 
     editMode: boolean = false;
-    tags: InventoryProduct[];
     tagsEditMode: boolean = false;
-    filteredTags: InventoryProduct[];
     contact: Contact;
     contactForm: FormGroup;
     contacts: Contact[];
@@ -44,10 +39,7 @@ export class ContactsDetailsComponent implements OnInit, OnDestroy
         private _contactsService: ContactsService,
         private _formBuilder: FormBuilder,
         private _fuseConfirmationService: FuseConfirmationService,
-        private _renderer2: Renderer2,
         private _router: Router,
-        private _overlay: Overlay,
-        private _viewContainerRef: ViewContainerRef
     )
     {
     }
@@ -71,10 +63,7 @@ export class ContactsDetailsComponent implements OnInit, OnDestroy
             name        : ['', [Validators.required]],
             emails      : this._formBuilder.array([]),
             phoneNumbers: this._formBuilder.array([]),
-            title       : [''],
             address     : [null],
-            notes       : [null],
-            tags        : [[]]
         });
 
         // Get the contacts
@@ -161,7 +150,7 @@ export class ContactsDetailsComponent implements OnInit, OnDestroy
                     // Create a phone number form group
                     phoneNumbersFormGroups.push(
                         this._formBuilder.group({
-                            country    : ['sy'],
+                            country    : ['us'],
                             phoneNumber: [''],
                             label      : ['']
                         })
@@ -174,7 +163,7 @@ export class ContactsDetailsComponent implements OnInit, OnDestroy
                 });
 
                 // Toggle the edit mode off
-                this.toggleEditMode(false);
+                // this.toggleEditMode(false);
 
                 // Mark for check
                 this._changeDetectorRef.markForCheck();
@@ -185,17 +174,6 @@ export class ContactsDetailsComponent implements OnInit, OnDestroy
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe((codes: Country[]) => {
                 this.countries = codes;
-
-                // Mark for check
-                this._changeDetectorRef.markForCheck();
-            });
-
-        // Get the tags
-        this._contactsService.tags$
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((tags: InventoryProduct[]) => {
-                this.tags = tags;
-                this.filteredTags = tags;
 
                 // Mark for check
                 this._changeDetectorRef.markForCheck();
@@ -235,20 +213,20 @@ export class ContactsDetailsComponent implements OnInit, OnDestroy
      *
      * @param editMode
      */
-    toggleEditMode(editMode: boolean | null = null): void
-    {
-        if ( editMode === null )
-        {
-            this.editMode = !this.editMode;
-        }
-        else
-        {
-            this.editMode = editMode;
-        }
+    // toggleEditMode(editMode: boolean | null = null): void
+    // {
+    //     if ( editMode === null )
+    //     {
+    //         this.editMode = !this.editMode;
+    //     }
+    //     else
+    //     {
+    //         this.editMode = editMode;
+    //     }
 
-        // Mark for check
-        this._changeDetectorRef.markForCheck();
-    }
+    //     // Mark for check
+    //     this._changeDetectorRef.markForCheck();
+    // }
 
     /**
      * Update the contact
@@ -267,7 +245,7 @@ export class ContactsDetailsComponent implements OnInit, OnDestroy
         this._contactsService.updateContact(contact.id, contact).subscribe(() => {
 
             // Toggle the edit mode off
-            this.toggleEditMode(false);
+            // this.toggleEditMode(false);
         });
     }
 
@@ -323,7 +301,7 @@ export class ContactsDetailsComponent implements OnInit, OnDestroy
                         }
 
                         // Toggle the edit mode off
-                        this.toggleEditMode(false);
+                        // this.toggleEditMode(false);
                     });
 
                 // Mark for check
@@ -376,255 +354,6 @@ export class ContactsDetailsComponent implements OnInit, OnDestroy
         // Update the contact
         this.contact.avatar = null;
     }
-
-    /**
-     * Open tags panel
-     */
-    openTagsPanel(): void
-    {
-        // Create the overlay
-        this._tagsPanelOverlayRef = this._overlay.create({
-            backdropClass   : '',
-            hasBackdrop     : true,
-            scrollStrategy  : this._overlay.scrollStrategies.block(),
-            positionStrategy: this._overlay.position()
-                                  .flexibleConnectedTo(this._tagsPanelOrigin.nativeElement)
-                                  .withFlexibleDimensions(true)
-                                  .withViewportMargin(64)
-                                  .withLockedPosition(true)
-                                  .withPositions([
-                                      {
-                                          originX : 'start',
-                                          originY : 'bottom',
-                                          overlayX: 'start',
-                                          overlayY: 'top'
-                                      }
-                                  ])
-        });
-
-        // Subscribe to the attachments observable
-        this._tagsPanelOverlayRef.attachments().subscribe(() => {
-
-            // Add a class to the origin
-            this._renderer2.addClass(this._tagsPanelOrigin.nativeElement, 'panel-opened');
-
-            // Focus to the search input once the overlay has been attached
-            this._tagsPanelOverlayRef.overlayElement.querySelector('input').focus();
-        });
-
-        // Create a portal from the template
-        const templatePortal = new TemplatePortal(this._tagsPanel, this._viewContainerRef);
-
-        // Attach the portal to the overlay
-        this._tagsPanelOverlayRef.attach(templatePortal);
-
-        // Subscribe to the backdrop click
-        this._tagsPanelOverlayRef.backdropClick().subscribe(() => {
-
-            // Remove the class from the origin
-            this._renderer2.removeClass(this._tagsPanelOrigin.nativeElement, 'panel-opened');
-
-            // If overlay exists and attached...
-            if ( this._tagsPanelOverlayRef && this._tagsPanelOverlayRef.hasAttached() )
-            {
-                // Detach it
-                this._tagsPanelOverlayRef.detach();
-
-                // Reset the tag filter
-                this.filteredTags = this.tags;
-
-                // Toggle the edit mode off
-                this.tagsEditMode = false;
-            }
-
-            // If template portal exists and attached...
-            if ( templatePortal && templatePortal.isAttached )
-            {
-                // Detach it
-                templatePortal.detach();
-            }
-        });
-    }
-
-    /**
-     * Toggle the tags edit mode
-     */
-    toggleTagsEditMode(): void
-    {
-        this.tagsEditMode = !this.tagsEditMode;
-    }
-
-    /**
-     * Filter tags
-     *
-     * @param event
-     */
-    filterTags(event): void
-    {
-        // Get the value
-        const value = event.target.value.toLowerCase();
-
-        // Filter the tags
-        this.filteredTags = this.tags.filter(tag => tag.name.toLowerCase().includes(value));
-    }
-
-    /**
-     * Filter tags input key down event
-     *
-     * @param event
-     */
-    filterTagsInputKeyDown(event): void
-    {
-        // Return if the pressed key is not 'Enter'
-        if ( event.key !== 'Enter' )
-        {
-            return;
-        }
-
-        // If there is no tag available...
-        if ( this.filteredTags.length === 0 )
-        {
-            // Create the tag
-            this.createTag(event.target.value);
-
-            // Clear the input
-            event.target.value = '';
-
-            // Return
-            return;
-        }
-
-        // If there is a tag...
-        const tag = this.filteredTags[0];
-        const isTagApplied = this.contact.tags.find(id => id === tag.id);
-
-        // If the found tag is already applied to the contact...
-        if ( isTagApplied )
-        {
-            // Remove the tag from the contact
-            this.removeTagFromContact(tag);
-        }
-        else
-        {
-            // Otherwise add the tag to the contact
-            this.addTagToContact(tag);
-        }
-    }
-
-    /**
-     * Create a new tag
-     *
-     * @param title
-     */
-    createTag(tag: InventoryProduct): void
-    {
-        // const tag = {
-        // };
-
-        // Create tag on the server
-        this._contactsService.createTag(tag)
-            .subscribe((response) => {
-
-                // Add the tag to the contact
-                this.addTagToContact(response);
-            });
-    }
-
-    /**
-     * Update the tag title
-     *
-     * @param tag
-     * @param event
-     */
-    updateTagTitle(tag: InventoryProduct, event): void
-    {
-        // Update the title on the tag
-        tag.name = event.target.value;
-
-        // Update the tag on the server
-        this._contactsService.updateTag(tag.name, tag)
-            .pipe(debounceTime(300))
-            .subscribe();
-
-        // Mark for check
-        this._changeDetectorRef.markForCheck();
-    }
-
-    /**
-     * Delete the tag
-     *
-     * @param tag
-     */
-    deleteTag(tag: Tag): void
-    {
-        // Delete the tag from the server
-        this._contactsService.deleteTag(tag.id).subscribe();
-
-        // Mark for check
-        this._changeDetectorRef.markForCheck();
-    }
-
-    /**
-     * Add tag to the contact
-     *
-     * @param tag
-     */
-    addTagToContact(tag: InventoryProduct): void
-    {
-        // Add the tag
-        this.contact.tags.unshift(tag.name);
-
-        // Update the contact form
-        this.contactForm.get('tags').patchValue(this.contact.tags);
-
-        // Mark for check
-        this._changeDetectorRef.markForCheck();
-    }
-
-    /**
-     * Remove tag from the contact
-     *
-     * @param tag
-     */
-    removeTagFromContact(tag: InventoryProduct): void
-    {
-        // Remove the tag
-        this.contact.tags.splice(this.contact.tags.findIndex(item => item === tag.id), 1);
-
-        // Update the contact form
-        this.contactForm.get('tags').patchValue(this.contact.tags);
-
-        // Mark for check
-        this._changeDetectorRef.markForCheck();
-    }
-
-    /**
-     * Toggle contact tag
-     *
-     * @param tag
-     */
-    toggleContactTag(tag: InventoryProduct): void
-    {
-        if ( this.contact.tags.includes(tag.name) )
-        {
-            this.removeTagFromContact(tag);
-        }
-        else
-        {
-            this.addTagToContact(tag);
-        }
-    }
-
-    /**
-     * Should the create tag button be visible
-     *
-     * @param inputValue
-     */
-    shouldShowCreateTagButton(inputValue: string): boolean
-    {
-        return !!!(inputValue === '' || this.tags.findIndex(tag => tag.name.toLowerCase() === inputValue.toLowerCase()) > -1);
-    }
-
     /**
      * Add the email field
      */

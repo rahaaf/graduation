@@ -57,6 +57,11 @@
                                 {{('Governorate'| transloco)}}
                             </div>
                             <div
+                            class="hidden md:block"
+                            [mat-sort-header]="'contact'">
+                            {{('Manager'| transloco)}}
+                             </div>
+                            <div
                                 class="hidden lg:block"
                                 [mat-sort-header]="'address'">
                                 {{('Address'|transloco)}}
@@ -79,8 +84,13 @@
                                     </div>
 
                                     <!-- governorate -->
-                                    <div class="hidden sm:block">
+                                    <div class="hidden sm:block truncate">
                                         {{product.governorate}}
+                                    </div>
+
+                                      <!--contacts-->
+                                      <div class="hidden md:block truncate">
+                                        {{product.contact}}
                                     </div>
 
                                     <!-- address -->
@@ -158,11 +168,21 @@
                                         <!-- Governorate, Coordinates -->
                                         <div class="flex">
                                             <mat-form-field class="w-1/3 pr-2">
-                                                <mat-label>Governorate</mat-label>
-                                                <mat-select [formControlName]="'category'">
+                                                <mat-label>{{'Governorate' | transloco}}</mat-label>
+                                                <mat-select [formControlName]="'governorate'">
                                                     <ng-container *ngFor="let category of governorate">
                                                         <mat-option [value]="category.id">
                                                             {{category.name}}
+                                                        </mat-option>
+                                                    </ng-container>
+                                                </mat-select>
+                                            </mat-form-field>
+                                            <mat-form-field class="w-1/3 pr-2">
+                                                <mat-label>{{'Manager' | transloco}}</mat-label>
+                                                <mat-select [formControlName]="'contact'">
+                                                    <ng-container *ngFor="let item of contacts">
+                                                        <mat-option [value]="item.id">
+                                                            {{item.name}}
                                                         </mat-option>
                                                     </ng-container>
                                                 </mat-select>

@@ -2,8 +2,7 @@ import { Injectable } from '@angular/core';
 import { from, map } from 'rxjs';
 import { assign, cloneDeep } from 'lodash-es';
 import { FuseMockApiService, FuseMockApiUtils } from '@fuse/lib/mock-api';
-import { contacts as contactsData, countries as countriesData} from 'app/mock-api/apps/contacts/data';
-import { products as tagsData } from 'app/mock-api/apps/ecommerce/inventory/data';
+import { contacts as contactsData, countries as countriesData, tags as tagsData } from 'app/mock-api/apps/contacts/data';
 
 @Injectable({
     providedIn: 'root'
@@ -12,7 +11,7 @@ export class ContactsMockApi
 {
     private _contacts: any[] = contactsData;
     private _countries: any[] = countriesData;
-    private _products: any[] = tagsData;
+    private _tags: any[] = tagsData;
 
     /**
      * Constructor
@@ -192,8 +191,8 @@ export class ContactsMockApi
         // @ Tags - GET
         // -----------------------------------------------------------------------------------------------------
         this._fuseMockApiService
-            .onGet('api/apps/ecommerce/inventory/products/name')
-            .reply(() => [200, cloneDeep(this._products)]);
+            .onGet('api/apps/contacts/tags')
+            .reply(() => [200, cloneDeep(this._tags)]);
 
         // -----------------------------------------------------------------------------------------------------
         // @ Tags - POST
@@ -209,7 +208,7 @@ export class ContactsMockApi
                 newTag.id = FuseMockApiUtils.guid();
 
                 // Unshift the new tag
-                this._products.unshift(newTag);
+                this._tags.unshift(newTag);
 
                 // Return the response
                 return [200, newTag];
@@ -219,20 +218,20 @@ export class ContactsMockApi
         // @ Tags - PATCH
         // -----------------------------------------------------------------------------------------------------
         this._fuseMockApiService
-            .onPatch('api/apps/ecommerce/inventory/products/name')
+            .onPatch('api/apps/contacts/tag')
             .reply(({request}) => {
 
                 // Get the id and tag
-                const name = request.body.name;
+                const id = request.body.id;
                 const tag = cloneDeep(request.body.tag);
 
                 // Prepare the updated tag
                 let updatedTag = null;
 
                 // Find the tag and update it
-                this._products.forEach((item, index, tags) => {
+                this._tags.forEach((item, index, tags) => {
 
-                    if ( item.name === name )
+                    if ( item.id === id )
                     {
                         // Update the tag
                         tags[index] = assign({}, tags[index], tag);
@@ -250,27 +249,27 @@ export class ContactsMockApi
         // @ Tag - DELETE
         // -----------------------------------------------------------------------------------------------------
         this._fuseMockApiService
-            .onDelete('api/apps/ecommerce/inventory/products/name')
+            .onDelete('api/apps/contacts/tag')
             .reply(({request}) => {
 
                 // Get the id
-                const name = request.params.get('name');
+                const id = request.params.get('id');
 
                 // Find the tag and delete it
-                this._products.forEach((item, index) => {
+                this._tags.forEach((item, index) => {
 
-                    if ( item.name === name )
+                    if ( item.id === id )
                     {
-                        this._products.splice(index, 1);
+                        this._tags.splice(index, 1);
                     }
                 });
 
                 // Get the contacts that have the tag
-                const contactsWithTag = this._contacts.filter(contact => contact.tags.indexOf(name) > -1);
+                const contactsWithTag = this._contacts.filter(contact => contact.tags.indexOf(id) > -1);
 
                 // Iterate through them and delete the tag
                 contactsWithTag.forEach((contact) => {
-                    contact.tags.splice(contact.tags.indexOf(name), 1);
+                    contact.tags.splice(contact.tags.indexOf(id), 1);
                 });
 
                 // Return the response

@@ -3,6 +3,7 @@ import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@a
 import { catchError, Observable, throwError } from 'rxjs';
 import { InventoryService } from 'app/modules/dashboard/admin/apps/add-store/inventory/inventory.service';
 import { InventoryCoordinates, InventoryGovernorate, InventoryPagination, InventoryProduct} from 'app/modules/dashboard/admin/apps/add-store/inventory/inventory.types';
+import { Contact } from '../../contacts/contacts.types';
 
 @Injectable({
     providedIn: 'root'
@@ -133,6 +134,33 @@ export class InventoryProductsResolver implements Resolve<any>
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<{ pagination: InventoryPagination; products: InventoryProduct[] }>
     {
         return this._inventoryService.getProducts();
+    }
+}
+@Injectable({
+    providedIn: 'root'
+})
+export class InventoryContactsResolver implements Resolve<any>
+{
+    /**
+     * Constructor
+     */
+    constructor(private _inventoryService: InventoryService)
+    {
+    }
+
+    // -----------------------------------------------------------------------------------------------------
+    // @ Public methods
+    // -----------------------------------------------------------------------------------------------------
+
+    /**
+     * Resolver
+     *
+     * @param route
+     * @param state
+     */
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Contact[]>
+    {
+        return this._inventoryService.getContacts();
     }
 }
 
