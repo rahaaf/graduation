@@ -10,36 +10,7 @@ export const governorate = [
         parentId: null,
         name    : 'al-Hasakah',
     },
-    {
-        id      : 'Raqqa',
-        parentId: null,
-        name    : 'Raqqa ',
-    },
-    {
-        id      : 'Daraa',
-        parentId: null,
-        name    : 'Daraa',
-    },
-    {
-        id      : 'Homs',
-        parentId: null,
-        name    : 'Homs',
-    },
-    {
-        id      : 'Idlib',
-        parentId: null,
-        name    : 'Idlib',
-    },
-    {
-        id      : 'Aleppo',
-        parentId: null,
-        name    : 'Aleppo ',
-    },
-    {
-        id      : 'Deir al-Zour',
-        parentId: null,
-        name    : 'Deir al-Zour',
-    },
+
     {
         id      : 'Hama',
         parentId: null,

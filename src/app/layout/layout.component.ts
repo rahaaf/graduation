@@ -1,3 +1,6 @@
+import { AlgorithmsService } from './../services/algorithms.service';
+import { HallService } from './../services/hall.service';
+import { StoreService } from './../services/store.service';
 import { Component, Inject, OnDestroy, OnInit, Renderer2, ViewEncapsulation } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
@@ -31,7 +34,10 @@ export class LayoutComponent implements OnInit, OnDestroy
         private _renderer2: Renderer2,
         private _router: Router,
         private _fuseConfigService: FuseConfigService,
-        private _fuseMediaWatcherService: FuseMediaWatcherService
+        private _fuseMediaWatcherService: FuseMediaWatcherService,
+        private StoreService:StoreService,
+        private HallService:HallService,
+        private AlgorithmsService:AlgorithmsService
     )
     {
     }
@@ -102,6 +108,16 @@ export class LayoutComponent implements OnInit, OnDestroy
 
         // Set the app version
         this._renderer2.setAttribute(this._document.querySelector('[ng-version]'), 'fuse-version', FUSE_VERSION);
+
+
+    // test apis
+// this.StoreService.editStore(1,{}).subscribe(res=>{
+//     console.log(res);
+// })
+this.AlgorithmsService.getOrder().subscribe(res=>{
+    console.log(res);
+})
+    // end test api
     }
 
     /**
