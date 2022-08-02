@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatPaginator } from '@angular/material/paginator';
@@ -6,7 +6,7 @@ import { MatSort } from '@angular/material/sort';
 import { debounceTime, map, merge, Observable, Subject, switchMap, takeUntil } from 'rxjs';
 import { fuseAnimations } from '@fuse/animations';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
-import { InventoryBrand, InventoryCategory, InventoryPagination, InventoryProduct, InventoryTag, InventoryVendor } from 'app/modules/dashboard/manage-store/add-goods/inventory/inventory.types';
+import {InventoryPagination, InventoryProduct, InventoryTag} from 'app/modules/dashboard/manage-store/add-goods/inventory/inventory.types';
 import { InventoryService } from 'app/modules/dashboard/manage-store/add-goods/inventory/inventory.service';
 
 @Component({
@@ -40,11 +40,10 @@ export class InventoryListComponent implements OnInit, AfterViewInit, OnDestroy
 {
     @ViewChild(MatPaginator) private _paginator: MatPaginator;
     @ViewChild(MatSort) private _sort: MatSort;
+    @ViewChild('avatarFileInput') private _avatarFileInput: ElementRef;
 
     products$: Observable<InventoryProduct[]>;
-
-    brands: InventoryBrand[];
-    categories: InventoryCategory[];
+    /* product: InventoryProduct; */
     filteredTags: InventoryTag[];
     flashMessage: 'success' | 'error' | null = null;
     isLoading: boolean = false;
@@ -54,7 +53,6 @@ export class InventoryListComponent implements OnInit, AfterViewInit, OnDestroy
     selectedProductForm: FormGroup;
     tags: InventoryTag[];
     tagsEditMode: boolean = false;
-    vendors: InventoryVendor[];
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     /**
@@ -81,50 +79,20 @@ export class InventoryListComponent implements OnInit, AfterViewInit, OnDestroy
         // Create the selected product form
         this.selectedProductForm = this._formBuilder.group({
             id               : [''],
-            category         : [''],
+            idstor           : [''],
             name             : ['', [Validators.required]],
-            description      : [''],
             tags             : [[]],
-            sku              : [''],
-            barcode          : [''],
-            brand            : [''],
-            vendor           : [''],
+            height           : [''],
+            width            : [''],
             stock            : [''],
-            reserved         : [''],
             cost             : [''],
             basePrice        : [''],
-            taxPercent       : [''],
             price            : [''],
             weight           : [''],
             thumbnail        : [''],
-            images           : [[]],
-            currentImageIndex: [0], // Image index that is currently being viewed
+            images           : [''],
             active           : [false]
         });
-
-        // Get the brands
-        this._inventoryService.brands$
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((brands: InventoryBrand[]) => {
-
-                // Update the brands
-                this.brands = brands;
-
-                // Mark for check
-                this._changeDetectorRef.markForCheck();
-            });
-
-        // Get the categories
-        this._inventoryService.categories$
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((categories: InventoryCategory[]) => {
-
-                // Update the categories
-                this.categories = categories;
-
-                // Mark for check
-                this._changeDetectorRef.markForCheck();
-            });
 
         // Get the pagination
         this._inventoryService.pagination$
@@ -149,18 +117,6 @@ export class InventoryListComponent implements OnInit, AfterViewInit, OnDestroy
                 // Update the tags
                 this.tags = tags;
                 this.filteredTags = tags;
-
-                // Mark for check
-                this._changeDetectorRef.markForCheck();
-            });
-
-        // Get the vendors
-        this._inventoryService.vendors$
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((vendors: InventoryVendor[]) => {
-
-                // Update the vendors
-                this.vendors = vendors;
 
                 // Mark for check
                 this._changeDetectorRef.markForCheck();
@@ -280,7 +236,7 @@ export class InventoryListComponent implements OnInit, AfterViewInit, OnDestroy
     /**
      * Cycle through images of selected product
      */
-    cycleImages(forward: boolean = true): void
+    /* cycleImages(forward: boolean = true): void
     {
         // Get the image count and current image index
         const count = this.selectedProductForm.get('images').value.length;
@@ -300,7 +256,7 @@ export class InventoryListComponent implements OnInit, AfterViewInit, OnDestroy
         {
             this.selectedProductForm.get('currentImageIndex').setValue(prevIndex);
         }
-    }
+    } */
 
     /**
      * Toggle the tags edit mode
@@ -511,7 +467,7 @@ export class InventoryListComponent implements OnInit, AfterViewInit, OnDestroy
         const product = this.selectedProductForm.getRawValue();
 
         // Remove the currentImageIndex field
-        delete product.currentImageIndex;
+        delete product.images;
 
         // Update the product on the server
         this._inventoryService.updateProduct(product.id, product).subscribe(() => {
@@ -587,5 +543,48 @@ export class InventoryListComponent implements OnInit, AfterViewInit, OnDestroy
     trackByFn(index: number, item: any): any
     {
         return item.id || index;
+    }
+        /**
+         * Upload avatar
+         *
+         * @param fileList
+         */
+         uploadAvatar(fileList: FileList): void
+    {
+        // Return if canceled
+        if ( !fileList.length )
+        {
+            return;
+        }
+
+        const allowedTypes = ['image/jpeg', 'image/png'];
+        const file = fileList[0];
+
+        // Return if the file is not allowed
+        if ( !allowedTypes.includes(file.type) )
+        {
+            return;
+        }
+        const product = this.selectedProductForm.getRawValue();
+        // Upload the avatar
+        this._inventoryService.uploadAvatar(product.id, file).subscribe();
+    }
+
+    /**
+     * Remove the avatar
+     */
+    removeAvatar(): void
+    {
+        // Get the form control for 'avatar'
+        const avatarFormControl = this.selectedProductForm.get('images');
+
+        // Set the avatar as null
+        avatarFormControl.setValue(null);
+
+        // Set the file input value as null
+        this._avatarFileInput.nativeElement.value = null;
+
+        // Update the contact
+        /* avatarFormControl.value.images = null; */
     }
 }
