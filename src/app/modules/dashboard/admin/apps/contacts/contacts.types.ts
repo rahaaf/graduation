@@ -13,11 +13,7 @@ export interface Contact
         phoneNumber: string;
         label: string;
     }[];
-    title?: string;
     address?: string | null;
-    notes?: string | null;
-    tags: string[];
-
 }
 
 export interface Country
@@ -29,9 +25,3 @@ export interface Country
     flagImagePos: string;
 }
 
-export interface Tag
-{
-    name: string;
-    id?: string;
-    title?: string;
-}

@@ -5,8 +5,9 @@ import { FormControl } from '@angular/forms';
 import { MatDrawer } from '@angular/material/sidenav';
 import { filter, fromEvent, Observable, Subject, switchMap, takeUntil } from 'rxjs';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
-import { Contact, Country } from 'app/modules/dashboard/admin/apps/contacts/contacts.types';
-import { ContactsService } from 'app/modules/dashboard/admin/apps/contacts/contacts.service';
+import { ContactsService } from '../contacts.service';
+import { Contact, Country } from '../contacts.types';
+
 
 @Component({
     selector       : 'contacts-list',

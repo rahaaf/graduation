@@ -10,6 +10,7 @@
     [opened]="!isScreenSmall">
     <!-- Navigation header hook -->
     <ng-container fuseVerticalNavigationContentHeader>
+
         <div class="flex items-center w-full p-4 pl-6">
             <!-- Logo -->
             <!-- <div class="flex items-center justify-center">
@@ -22,6 +23,7 @@
                 <notifications></notifications>
                 <user [showAvatar]="false"></user>
             </div>
+
         </div>
         <!-- User -->
         <!-- <div class="flex flex-col items-center w-full p-4">
@@ -45,6 +47,7 @@
                 </div>
             </div>
         </div> -->
+
     </ng-container>
     <!-- Navigation footer hook -->
     <ng-container fuseVerticalNavigationContentFooter>
@@ -53,7 +56,9 @@
                 class="max-w-36"
                 src="assets/images/logo/3.png">
         </div>
+
     </ng-container>
+
 </fuse-vertical-navigation>
 
 <!-- Wrapper -->
@@ -73,6 +78,7 @@
             <fuse-fullscreen class="hidden md:block"></fuse-fullscreen>
             <search [appearance]="'bar'"></search>
         </div>
+
     </div>
 
     <!-- Content -->

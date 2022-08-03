@@ -1,7 +1,7 @@
 import { Route } from '@angular/router';
 import { InventoryComponent } from 'app/modules/dashboard/admin/apps/add-hall/inventory/inventory.component';
 import { InventoryListComponent } from 'app/modules/dashboard/admin/apps/add-hall/inventory/list/inventory.component';
-import { InventoryCoordinatesResolver, InventoryGovernorateResolver, InventoryProductsResolver } from 'app/modules/dashboard/admin/apps/add-hall/inventory/inventory.resolvers';
+import { InventoryCoordinatesResolver, InventoryGovernorateResolver, InventoryProductsResolver,InventoryContactsResolver } from 'app/modules/dashboard/admin/apps/add-hall/inventory/inventory.resolvers';
 
 export const ecommerceRoutes: Route[] = [
     {
@@ -20,6 +20,7 @@ export const ecommerceRoutes: Route[] = [
                     brands    :InventoryCoordinatesResolver,
                     categories: InventoryGovernorateResolver,
                     products  : InventoryProductsResolver,
+                    contacts: InventoryContactsResolver
                 }
             }
         ]

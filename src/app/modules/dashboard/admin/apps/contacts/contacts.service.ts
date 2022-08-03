@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, filter, map, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
-import { Contact, Country, Tag } from 'app/modules/dashboard/admin/apps/contacts/contacts.types';
-import { InventoryProduct } from '../add-store/inventory/inventory.types';
+import { Contact, Country } from './contacts.types';
 
 @Injectable({
     providedIn: 'root'
@@ -13,8 +12,6 @@ export class ContactsService
     private _contact: BehaviorSubject<Contact | null> = new BehaviorSubject(null);
     private _contacts: BehaviorSubject<Contact[] | null> = new BehaviorSubject(null);
     private _countries: BehaviorSubject<Country[] | null> = new BehaviorSubject(null);
-    private _tags: BehaviorSubject<InventoryProduct[] | null> = new BehaviorSubject(null);
-
     /**
      * Constructor
      */
@@ -48,14 +45,6 @@ export class ContactsService
     get countries$(): Observable<Country[]>
     {
         return this._countries.asObservable();
-    }
-
-    /**
-     * Getter for tags
-     */
-    get tags$(): Observable<InventoryProduct[]>
-    {
-        return this._tags.asObservable();
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -223,122 +212,6 @@ export class ContactsService
             })
         );
     }
-
-    /**
-     * Get tags
-     */
-    getTags(): Observable<InventoryProduct[]>
-    {
-        return this._httpClient.get<InventoryProduct[]>('api/apps/ecommerce/inventory/products/name').pipe(
-            tap((tags) => {
-                this._tags.next(tags);
-            })
-        );
-    }
-
-    /**
-     * Create tag
-     *
-     * @param tag
-     */
-    createTag(tag: InventoryProduct): Observable<InventoryProduct>
-    {
-        return this.tags$.pipe(
-            take(1),
-            switchMap(tags => this._httpClient.post<InventoryProduct>('api/apps/ecommerce/inventory/products/name', {tag}).pipe(
-                map((newTag) => {
-
-                    // Update the tags with the new tag
-                    this._tags.next([...tags, newTag]);
-
-                    // Return new tag from observable
-                    return newTag;
-                })
-            ))
-        );
-    }
-
-    /**
-     * Update the tag
-     *
-     * @param id
-     * @param tag
-     */
-    updateTag(name: string, tag: InventoryProduct): Observable<InventoryProduct>
-    {
-        return this.tags$.pipe(
-            take(1),
-            switchMap(tags => this._httpClient.patch<InventoryProduct>('api/apps/ecommerce/inventory/products/name', {
-                name,
-                tag
-            }).pipe(
-                map((updatedTag) => {
-
-                    // Find the index of the updated tag
-                    const index = tags.findIndex(item => item.name === name);
-
-                    // Update the tag
-                    tags[index] = updatedTag;
-
-                    // Update the tags
-                    this._tags.next(tags);
-
-                    // Return the updated tag
-                    return updatedTag;
-                })
-            ))
-        );
-    }
-
-    /**
-     * Delete the tag
-     *
-     * @param id
-     */
-    deleteTag(name: string): Observable<boolean>
-    {
-        return this.tags$.pipe(
-            take(1),
-            switchMap(tags => this._httpClient.delete('api/apps/ecommerce/inventory/products/name', {params: {name}}).pipe(
-                map((isDeleted: boolean) => {
-
-                    // Find the index of the deleted tag
-                    const index = tags.findIndex(item => item.name === name);
-
-                    // Delete the tag
-                    tags.splice(index, 1);
-
-                    // Update the tags
-                    this._tags.next(tags);
-
-                    // Return the deleted status
-                    return isDeleted;
-                }),
-                filter(isDeleted => isDeleted),
-                switchMap(isDeleted => this.contacts$.pipe(
-                    take(1),
-                    map((contacts) => {
-
-                        // Iterate through the contacts
-                        contacts.forEach((contact) => {
-
-                            const tagIndex = contact.tags.findIndex(tag => tag === name);
-
-                            // If the contact has the tag, remove it
-                            if ( tagIndex > -1 )
-                            {
-                                contact.tags.splice(tagIndex, 1);
-                            }
-                        });
-
-                        // Return the deleted status
-                        return isDeleted;
-                    })
-                ))
-            ))
-        );
-    }
-
     /**
      * Update the avatar of the given contact
      *

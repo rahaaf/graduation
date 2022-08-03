@@ -9,6 +9,7 @@ import { InventoryCoordinates, InventoryGovernorate, InventoryPagination, Invent
 import { InventoryService } from 'app/modules/dashboard/admin/apps/add-store/inventory/inventory.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MapComponent } from 'app/layout/common/map/map.component';
+import { Contact } from '../../../contacts/contacts.types';
 
 @Component({
     selector: 'inventory-list',
@@ -44,6 +45,7 @@ export class InventoryListComponent implements OnInit, AfterViewInit, OnDestroy 
     products$: Observable<InventoryProduct[]>;
 
     coordinates: InventoryCoordinates[];
+    contactes: Contact[];
     governorate: InventoryGovernorate[];
     flashMessage: 'success' | 'error' | null = null;
     isLoading: boolean = false;
@@ -51,7 +53,6 @@ export class InventoryListComponent implements OnInit, AfterViewInit, OnDestroy 
     searchInputControl: FormControl = new FormControl();
     selectedProduct: InventoryProduct | null = null;
     selectedProductForm: FormGroup;
-    tagsEditMode: boolean = false;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
 
     /**
@@ -84,13 +85,14 @@ export class InventoryListComponent implements OnInit, AfterViewInit, OnDestroy 
     ngOnInit(): void {
         // Create the selected product form
         this.selectedProductForm = this._formBuilder.group({
-            id: [''],
-            governorate: [''],
-            name: ['', [Validators.required]],
-            address: [''],
-            coordinates: [''],
-            spacetotle: [''],
-            avgsales: [''],
+            id               : [''],
+            governorate      : [''],
+            contact          : [''],
+            name             : ['', [Validators.required]],
+            address          : [''],
+            coordinates      : [''],
+            spacetotle       : [''],
+            avgsales         : [''],
         });
 
         // Get the Coordinates
@@ -115,6 +117,15 @@ export class InventoryListComponent implements OnInit, AfterViewInit, OnDestroy 
 
                 // Mark for check
                 this._changeDetectorRef.markForCheck();
+            });
+            // Get the contacts
+            this._inventoryService._contact$
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe((contacts: Contact[]) =>{
+                //update the Cotact
+              this.contactes = contacts;
+                 //Mark for check
+                 this._changeDetectorRef.markForCheck();
             });
 
         // Get the pagination
@@ -224,8 +235,7 @@ export class InventoryListComponent implements OnInit, AfterViewInit, OnDestroy 
 
                 // Fill the form
                 this.selectedProductForm.setValue(product);
-
-                // Mark for check
+                 // Mark for check
                 this._changeDetectorRef.markForCheck();
             });
     }

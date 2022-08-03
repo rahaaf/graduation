@@ -19,10 +19,12 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import * as moment from 'moment';
 import { FuseFindByKeyPipeModule } from '@fuse/pipes/find-by-key';
 import { SharedModule } from 'app/shared/shared.module';
-import { contactsRoutes } from 'app/modules/dashboard/admin/apps/contacts/contacts.routing';
-import { ContactsComponent } from 'app/modules/dashboard/admin/apps/contacts/contacts.component';
-import { ContactsDetailsComponent } from 'app/modules/dashboard/admin/apps/contacts/details/details.component';
-import { ContactsListComponent } from 'app/modules/dashboard/admin/apps/contacts/list/list.component';
+import { ContactsComponent } from './contacts.component';
+import { contactsRoutes } from './contacts.routing';
+import { ContactsDetailsComponent } from './details/details.component';
+import { ContactsListComponent } from './list/list.component';
+import { TranslocoModule } from '@ngneat/transloco';
+
 
 @NgModule({
     declarations: [
@@ -49,6 +51,7 @@ import { ContactsListComponent } from 'app/modules/dashboard/admin/apps/contacts
         MatTableModule,
         MatTooltipModule,
         FuseFindByKeyPipeModule,
+        TranslocoModule,
         SharedModule
     ],
     providers   : [

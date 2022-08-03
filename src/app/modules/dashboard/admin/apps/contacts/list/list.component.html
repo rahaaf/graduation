@@ -25,15 +25,15 @@
 
                     <!-- Title -->
                     <div>
-                        <div class="text-4xl font-extrabold tracking-tight leading-none">Contacts</div>
+                        <div class="text-4xl font-extrabold tracking-tight leading-none">{{"Contacts" | transloco}}</div>
                         <div class="ml-0.5 font-medium text-secondary">
                             <ng-container *ngIf="contactsCount > 0">
                                 {{contactsCount}}
                             </ng-container>
                             {{contactsCount | i18nPlural: {
-                            '=0'   : 'No contacts',
-                            '=1'   : 'contact',
-                            'other': 'contacts'
+                            '=0'   : 'Nocontacts' | transloco,
+                            '=1'   : 'contact' | transloco,
+                            'other': 'contacts' | transloco
                         } }}
                         </div>
                     </div>
@@ -51,7 +51,7 @@
                                     matInput
                                     [formControl]="searchInputControl"
                                     [autocomplete]="'off'"
-                                    [placeholder]="'Search contacts'">
+                                    [placeholder]="'Searchcontacts' | transloco">
                             </mat-form-field>
                         </div>
                         <!-- Add contact button -->
@@ -61,7 +61,7 @@
                             [color]="'primary'"
                             (click)="createContact()">
                             <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
-                            <span class="ml-2 mr-1">Add</span>
+                            <span class="ml-2 mr-1">{{'AddContact' | transloco}}</span>
                         </button>
                     </div>
                 </div>
@@ -107,7 +107,7 @@
 
                     <!-- No contacts -->
                     <ng-template #noContacts>
-                        <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">There are no contacts!</div>
+                        <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">{{'Therearenocontacts' | transloco}}!</div>
                     </ng-template>
 
                 </div>
