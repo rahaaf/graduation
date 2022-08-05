@@ -163,7 +163,7 @@ export class ContactsDetailsComponent implements OnInit, OnDestroy
                 });
 
                 // Toggle the edit mode off
-                // this.toggleEditMode(false);
+                this.toggleEditMode(false);
 
                 // Mark for check
                 this._changeDetectorRef.markForCheck();
@@ -213,20 +213,20 @@ export class ContactsDetailsComponent implements OnInit, OnDestroy
      *
      * @param editMode
      */
-    // toggleEditMode(editMode: boolean | null = null): void
-    // {
-    //     if ( editMode === null )
-    //     {
-    //         this.editMode = !this.editMode;
-    //     }
-    //     else
-    //     {
-    //         this.editMode = editMode;
-    //     }
+    toggleEditMode(editMode: boolean | null = null): void
+    {
+        if ( editMode === null )
+        {
+            this.editMode = !this.editMode;
+        }
+        else
+        {
+            this.editMode = editMode;
+        }
 
-    //     // Mark for check
-    //     this._changeDetectorRef.markForCheck();
-    // }
+        // Mark for check
+        this._changeDetectorRef.markForCheck();
+    }
 
     /**
      * Update the contact
@@ -245,7 +245,7 @@ export class ContactsDetailsComponent implements OnInit, OnDestroy
         this._contactsService.updateContact(contact.id, contact).subscribe(() => {
 
             // Toggle the edit mode off
-            // this.toggleEditMode(false);
+            this.toggleEditMode(false);
         });
     }
 

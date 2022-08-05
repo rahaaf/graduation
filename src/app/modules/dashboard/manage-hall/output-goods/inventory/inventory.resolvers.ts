@@ -2,63 +2,8 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@angular/router';
 import { catchError, Observable, throwError } from 'rxjs';
 import { InventoryService } from 'app/modules/dashboard/manage-hall/output-goods/inventory/inventory.service';
-import { InventoryBrand, InventoryCategory, InventoryPagination, InventoryProduct, InventoryTag, InventoryVendor } from 'app/modules/dashboard/manage-hall/output-goods/inventory/inventory.types';
+import { InventoryGoods, InventoryPaginationGoods, InventoryTag } from './inventory.types';
 
-@Injectable({
-    providedIn: 'root'
-})
-export class InventoryBrandsResolver implements Resolve<any>
-{
-    /**
-     * Constructor
-     */
-    constructor(private _inventoryService: InventoryService)
-    {
-    }
-
-    // -----------------------------------------------------------------------------------------------------
-    // @ Public methods
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * Resolver
-     *
-     * @param route
-     * @param state
-     */
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<InventoryBrand[]>
-    {
-        return this._inventoryService.getBrands();
-    }
-}
-
-@Injectable({
-    providedIn: 'root'
-})
-export class InventoryCategoriesResolver implements Resolve<any>
-{
-    /**
-     * Constructor
-     */
-    constructor(private _inventoryService: InventoryService)
-    {
-    }
-
-    // -----------------------------------------------------------------------------------------------------
-    // @ Public methods
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * Resolver
-     *
-     * @param route
-     * @param state
-     */
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<InventoryCategory[]>
-    {
-        return this._inventoryService.getCategories();
-    }
-}
 
 @Injectable({
     providedIn: 'root'
@@ -85,7 +30,7 @@ export class InventoryProductResolver implements Resolve<any>
      * @param route
      * @param state
      */
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<InventoryProduct>
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<InventoryGoods>
     {
         return this._inventoryService.getProductById(route.paramMap.get('id'))
                    .pipe(
@@ -130,7 +75,7 @@ export class InventoryProductsResolver implements Resolve<any>
      * @param route
      * @param state
      */
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<{ pagination: InventoryPagination; products: InventoryProduct[] }>
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<{ pagination: InventoryPaginationGoods; products: InventoryGoods[] }>
     {
         return this._inventoryService.getProducts();
     }
@@ -161,33 +106,5 @@ export class InventoryTagsResolver implements Resolve<any>
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<InventoryTag[]>
     {
         return this._inventoryService.getTags();
-    }
-}
-
-@Injectable({
-    providedIn: 'root'
-})
-export class InventoryVendorsResolver implements Resolve<any>
-{
-    /**
-     * Constructor
-     */
-    constructor(private _inventoryService: InventoryService)
-    {
-    }
-
-    // -----------------------------------------------------------------------------------------------------
-    // @ Public methods
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * Resolver
-     *
-     * @param route
-     * @param state
-     */
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<InventoryVendor[]>
-    {
-        return this._inventoryService.getVendors();
     }
 }

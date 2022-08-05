@@ -93,7 +93,7 @@ export class InventoryService
      */
     getBrands(): Observable<InventoryBrand[]>
     {
-        return this._httpClient.get<InventoryBrand[]>('api/apps/ecommerce/inventory/brands').pipe(
+        return this._httpClient.get<InventoryBrand[]>('api/apps/products/inventory/brands').pipe(
             tap((brands) => {
                 this._brands.next(brands);
             })
@@ -105,7 +105,7 @@ export class InventoryService
      */
     getCategories(): Observable<InventoryCategory[]>
     {
-        return this._httpClient.get<InventoryCategory[]>('api/apps/ecommerce/inventory/categories').pipe(
+        return this._httpClient.get<InventoryCategory[]>('api/apps/products/inventory/categories').pipe(
             tap((categories) => {
                 this._categories.next(categories);
             })
@@ -125,7 +125,7 @@ export class InventoryService
     getProducts(page: number = 0, size: number = 10, sort: string = 'name', order: 'asc' | 'desc' | '' = 'asc', search: string = ''):
         Observable<{ pagination: InventoryPagination; products: InventoryProduct[] }>
     {
-        return this._httpClient.get<{ pagination: InventoryPagination; products: InventoryProduct[] }>('api/apps/ecommerce/inventory/products', {
+        return this._httpClient.get<{ pagination: InventoryPagination; products: InventoryProduct[] }>('api/apps/products/inventory/products', {
             params: {
                 page: '' + page,
                 size: '' + size,
@@ -178,7 +178,7 @@ export class InventoryService
     {
         return this.products$.pipe(
             take(1),
-            switchMap(products => this._httpClient.post<InventoryProduct>('api/apps/ecommerce/inventory/product', {}).pipe(
+            switchMap(products => this._httpClient.post<InventoryProduct>('api/apps/products/inventory/product', {}).pipe(
                 map((newProduct) => {
 
                     // Update the products with the new product
@@ -201,7 +201,7 @@ export class InventoryService
     {
         return this.products$.pipe(
             take(1),
-            switchMap(products => this._httpClient.patch<InventoryProduct>('api/apps/ecommerce/inventory/product', {
+            switchMap(products => this._httpClient.patch<InventoryProduct>('api/apps/products/inventory/product', {
                 id,
                 product
             }).pipe(
@@ -244,7 +244,7 @@ export class InventoryService
     {
         return this.products$.pipe(
             take(1),
-            switchMap(products => this._httpClient.delete('api/apps/ecommerce/inventory/product', {params: {id}}).pipe(
+            switchMap(products => this._httpClient.delete('api/apps/products/inventory/product', {params: {id}}).pipe(
                 map((isDeleted: boolean) => {
 
                     // Find the index of the deleted product
@@ -268,7 +268,7 @@ export class InventoryService
      */
     getTags(): Observable<InventoryTag[]>
     {
-        return this._httpClient.get<InventoryTag[]>('api/apps/ecommerce/inventory/tags').pipe(
+        return this._httpClient.get<InventoryTag[]>('api/apps/products/inventory/tags').pipe(
             tap((tags) => {
                 this._tags.next(tags);
             })
@@ -284,7 +284,7 @@ export class InventoryService
     {
         return this.tags$.pipe(
             take(1),
-            switchMap(tags => this._httpClient.post<InventoryTag>('api/apps/ecommerce/inventory/tag', {tag}).pipe(
+            switchMap(tags => this._httpClient.post<InventoryTag>('api/apps/products/inventory/tag', {tag}).pipe(
                 map((newTag) => {
 
                     // Update the tags with the new tag
@@ -307,7 +307,7 @@ export class InventoryService
     {
         return this.tags$.pipe(
             take(1),
-            switchMap(tags => this._httpClient.patch<InventoryTag>('api/apps/ecommerce/inventory/tag', {
+            switchMap(tags => this._httpClient.patch<InventoryTag>('api/apps/products/inventory/tag', {
                 id,
                 tag
             }).pipe(
@@ -338,7 +338,7 @@ export class InventoryService
     {
         return this.tags$.pipe(
             take(1),
-            switchMap(tags => this._httpClient.delete('api/apps/ecommerce/inventory/tag', {params: {id}}).pipe(
+            switchMap(tags => this._httpClient.delete('api/apps/products/inventory/tag', {params: {id}}).pipe(
                 map((isDeleted: boolean) => {
 
                     // Find the index of the deleted tag
@@ -383,7 +383,7 @@ export class InventoryService
      */
     getVendors(): Observable<InventoryVendor[]>
     {
-        return this._httpClient.get<InventoryVendor[]>('api/apps/ecommerce/inventory/vendors').pipe(
+        return this._httpClient.get<InventoryVendor[]>('api/apps/products/inventory/vendors').pipe(
             tap((vendors) => {
                 this._vendors.next(vendors);
             })

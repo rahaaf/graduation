@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, filter, map, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
-import { InventoryBrand, InventoryCategory, InventoryPagination, InventoryProduct, InventoryTag, InventoryVendor } from 'app/modules/dashboard/manage-hall/add-goods/inventory/inventory.types';
+import { InventoryPagination, InventoryProduct, InventoryTag } from 'app/modules/dashboard/manage-hall/add-goods/inventory/inventory.types';
 
 @Injectable({
     providedIn: 'root'
@@ -9,13 +9,10 @@ import { InventoryBrand, InventoryCategory, InventoryPagination, InventoryProduc
 export class InventoryService
 {
     // Private
-    private _brands: BehaviorSubject<InventoryBrand[] | null> = new BehaviorSubject(null);
-    private _categories: BehaviorSubject<InventoryCategory[] | null> = new BehaviorSubject(null);
     private _pagination: BehaviorSubject<InventoryPagination | null> = new BehaviorSubject(null);
     private _product: BehaviorSubject<InventoryProduct | null> = new BehaviorSubject(null);
     private _products: BehaviorSubject<InventoryProduct[] | null> = new BehaviorSubject(null);
     private _tags: BehaviorSubject<InventoryTag[] | null> = new BehaviorSubject(null);
-    private _vendors: BehaviorSubject<InventoryVendor[] | null> = new BehaviorSubject(null);
 
     /**
      * Constructor
@@ -27,22 +24,6 @@ export class InventoryService
     // -----------------------------------------------------------------------------------------------------
     // @ Accessors
     // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * Getter for brands
-     */
-    get brands$(): Observable<InventoryBrand[]>
-    {
-        return this._brands.asObservable();
-    }
-
-    /**
-     * Getter for categories
-     */
-    get categories$(): Observable<InventoryCategory[]>
-    {
-        return this._categories.asObservable();
-    }
 
     /**
      * Getter for pagination
@@ -75,42 +56,9 @@ export class InventoryService
     {
         return this._tags.asObservable();
     }
-
-    /**
-     * Getter for vendors
-     */
-    get vendors$(): Observable<InventoryVendor[]>
-    {
-        return this._vendors.asObservable();
-    }
-
     // -----------------------------------------------------------------------------------------------------
     // @ Public methods
     // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * Get brands
-     */
-    getBrands(): Observable<InventoryBrand[]>
-    {
-        return this._httpClient.get<InventoryBrand[]>('api/apps/ecommerce/inventory/brands').pipe(
-            tap((brands) => {
-                this._brands.next(brands);
-            })
-        );
-    }
-
-    /**
-     * Get categories
-     */
-    getCategories(): Observable<InventoryCategory[]>
-    {
-        return this._httpClient.get<InventoryCategory[]>('api/apps/ecommerce/inventory/categories').pipe(
-            tap((categories) => {
-                this._categories.next(categories);
-            })
-        );
-    }
 
     /**
      * Get products
@@ -125,7 +73,7 @@ export class InventoryService
     getProducts(page: number = 0, size: number = 10, sort: string = 'name', order: 'asc' | 'desc' | '' = 'asc', search: string = ''):
         Observable<{ pagination: InventoryPagination; products: InventoryProduct[] }>
     {
-        return this._httpClient.get<{ pagination: InventoryPagination; products: InventoryProduct[] }>('api/apps/ecommerce/inventory/products', {
+        return this._httpClient.get<{ pagination: InventoryPagination; products: InventoryProduct[] }>('api/apps/products/inventory/products', {
             params: {
                 page: '' + page,
                 size: '' + size,
@@ -178,7 +126,7 @@ export class InventoryService
     {
         return this.products$.pipe(
             take(1),
-            switchMap(products => this._httpClient.post<InventoryProduct>('api/apps/ecommerce/inventory/product', {}).pipe(
+            switchMap(products => this._httpClient.post<InventoryProduct>('api/apps/products/inventory/product', {}).pipe(
                 map((newProduct) => {
 
                     // Update the products with the new product
@@ -201,7 +149,7 @@ export class InventoryService
     {
         return this.products$.pipe(
             take(1),
-            switchMap(products => this._httpClient.patch<InventoryProduct>('api/apps/ecommerce/inventory/product', {
+            switchMap(products => this._httpClient.patch<InventoryProduct>('api/apps/products/inventory/product', {
                 id,
                 product
             }).pipe(
@@ -244,7 +192,7 @@ export class InventoryService
     {
         return this.products$.pipe(
             take(1),
-            switchMap(products => this._httpClient.delete('api/apps/ecommerce/inventory/product', {params: {id}}).pipe(
+            switchMap(products => this._httpClient.delete('api/apps/products/inventory/product', {params: {id}}).pipe(
                 map((isDeleted: boolean) => {
 
                     // Find the index of the deleted product
@@ -268,7 +216,7 @@ export class InventoryService
      */
     getTags(): Observable<InventoryTag[]>
     {
-        return this._httpClient.get<InventoryTag[]>('api/apps/ecommerce/inventory/tags').pipe(
+        return this._httpClient.get<InventoryTag[]>('api/apps/products/inventory/tags').pipe(
             tap((tags) => {
                 this._tags.next(tags);
             })
@@ -284,7 +232,7 @@ export class InventoryService
     {
         return this.tags$.pipe(
             take(1),
-            switchMap(tags => this._httpClient.post<InventoryTag>('api/apps/ecommerce/inventory/tag', {tag}).pipe(
+            switchMap(tags => this._httpClient.post<InventoryTag>('api/apps/products/inventory/tag', {tag}).pipe(
                 map((newTag) => {
 
                     // Update the tags with the new tag
@@ -307,7 +255,7 @@ export class InventoryService
     {
         return this.tags$.pipe(
             take(1),
-            switchMap(tags => this._httpClient.patch<InventoryTag>('api/apps/ecommerce/inventory/tag', {
+            switchMap(tags => this._httpClient.patch<InventoryTag>('api/apps/products/inventory/tag', {
                 id,
                 tag
             }).pipe(
@@ -338,7 +286,7 @@ export class InventoryService
     {
         return this.tags$.pipe(
             take(1),
-            switchMap(tags => this._httpClient.delete('api/apps/ecommerce/inventory/tag', {params: {id}}).pipe(
+            switchMap(tags => this._httpClient.delete('api/apps/products/inventory/tag', {params: {id}}).pipe(
                 map((isDeleted: boolean) => {
 
                     // Find the index of the deleted tag
@@ -377,64 +325,52 @@ export class InventoryService
             ))
         );
     }
+ /**
+  * Update the avatar of the given contact
+  *
+  * @param id
+  * @param avatar
+  */
+  uploadAvatar(id: string, images: File): Observable<InventoryProduct>
+  {
+      return this.products$.pipe(
+          take(1),
+          switchMap(products => this._httpClient.post<InventoryProduct>('api/apps/products/inventory/images', {
+              id,
+              images
+          }, {
+              headers: {
+                  // eslint-disable-next-line @typescript-eslint/naming-convention
+                  'Content-Type': images.type
+              }
+          }).pipe(
+              map((updatedProduct) => {
 
-    /**
-     * Get vendors
-     */
-    getVendors(): Observable<InventoryVendor[]>
-    {
-        return this._httpClient.get<InventoryVendor[]>('api/apps/ecommerce/inventory/vendors').pipe(
-            tap((vendors) => {
-                this._vendors.next(vendors);
-            })
-        );
-    }
+                  // Find the index of the updated contact
+                  const index = products.findIndex(item => item.id === id);
 
-    /**
-     * Update the avatar of the given contact
-     *
-     * @param id
-     * @param avatar
-     */
-    /*uploadAvatar(id: string, avatar: File): Observable<Contact>
-    {
-        return this.contacts$.pipe(
-            take(1),
-            switchMap(contacts => this._httpClient.post<Contact>('api/apps/contacts/avatar', {
-                id,
-                avatar
-            }, {
-                headers: {
-                    'Content-Type': avatar.type
-                }
-            }).pipe(
-                map((updatedContact) => {
+                  // Update the contact
+                  products[index] = updatedProduct;
 
-                    // Find the index of the updated contact
-                    const index = contacts.findIndex(item => item.id === id);
+                  // Update the contacts
+                  this._products.next(products);
 
-                    // Update the contact
-                    contacts[index] = updatedContact;
+                  // Return the updated contact
+                  return updatedProduct;
+              }),
+              switchMap(updatedProduct => this.product$.pipe(
+                  take(1),
+                  filter(item => item && item.id === id),
+                  tap(() => {
 
-                    // Update the contacts
-                    this._contacts.next(contacts);
+                      // Update the contact if it's selected
+                      this._product.next(updatedProduct);
 
-                    // Return the updated contact
-                    return updatedContact;
-                }),
-                switchMap(updatedContact => this.contact$.pipe(
-                    take(1),
-                    filter(item => item && item.id === id),
-                    tap(() => {
-
-                        // Update the contact if it's selected
-                        this._contact.next(updatedContact);
-
-                        // Return the updated contact
-                        return updatedContact;
-                    })
-                ))
-            ))
-        );
-    }*/
+                      // Return the updated contact
+                      return updatedProduct;
+                  })
+              ))
+          ))
+      );
+  }
 }

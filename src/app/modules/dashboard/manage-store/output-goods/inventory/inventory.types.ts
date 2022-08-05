@@ -1,27 +1,21 @@
-export interface InventoryProduct
+export interface InventoryGoods
 {
     id: string;
-    category?: string;
+    namestore?: string;
+    namehall: string;
     name: string;
-    description?: string;
     tags?: string[];
-    sku?: string | null;
-    barcode?: string | null;
-    brand?: string | null;
-    vendor: string | null;
-    stock: number;
-    reserved: number;
+    quantity: number;
+    width: number;
     cost: number;
     basePrice: number;
-    taxPercent: number;
+    height: number;
     price: number;
     weight: number;
-    thumbnail: string;
-    images: string[];
-    active: boolean;
+    images: string;
 }
 
-export interface InventoryPagination
+export interface InventoryPaginationGoods
 {
     length: number;
     size: number;

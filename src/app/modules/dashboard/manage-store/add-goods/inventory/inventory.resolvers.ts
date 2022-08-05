@@ -2,63 +2,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@angular/router';
 import { catchError, Observable, throwError } from 'rxjs';
 import { InventoryService } from 'app/modules/dashboard/manage-store/add-goods/inventory/inventory.service';
-import { InventoryBrand, InventoryCategory, InventoryPagination, InventoryProduct, InventoryTag, InventoryVendor } from 'app/modules/dashboard/manage-store/add-goods/inventory/inventory.types';
-
-@Injectable({
-    providedIn: 'root'
-})
-export class InventoryBrandsResolver implements Resolve<any>
-{
-    /**
-     * Constructor
-     */
-    constructor(private _inventoryService: InventoryService)
-    {
-    }
-
-    // -----------------------------------------------------------------------------------------------------
-    // @ Public methods
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * Resolver
-     *
-     * @param route
-     * @param state
-     */
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<InventoryBrand[]>
-    {
-        return this._inventoryService.getBrands();
-    }
-}
-
-@Injectable({
-    providedIn: 'root'
-})
-export class InventoryCategoriesResolver implements Resolve<any>
-{
-    /**
-     * Constructor
-     */
-    constructor(private _inventoryService: InventoryService)
-    {
-    }
-
-    // -----------------------------------------------------------------------------------------------------
-    // @ Public methods
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * Resolver
-     *
-     * @param route
-     * @param state
-     */
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<InventoryCategory[]>
-    {
-        return this._inventoryService.getCategories();
-    }
-}
+import { InventoryPagination, InventoryProduct, InventoryTag } from 'app/modules/dashboard/manage-store/add-goods/inventory/inventory.types';
 
 @Injectable({
     providedIn: 'root'
@@ -161,33 +105,5 @@ export class InventoryTagsResolver implements Resolve<any>
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<InventoryTag[]>
     {
         return this._inventoryService.getTags();
-    }
-}
-
-@Injectable({
-    providedIn: 'root'
-})
-export class InventoryVendorsResolver implements Resolve<any>
-{
-    /**
-     * Constructor
-     */
-    constructor(private _inventoryService: InventoryService)
-    {
-    }
-
-    // -----------------------------------------------------------------------------------------------------
-    // @ Public methods
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * Resolver
-     *
-     * @param route
-     * @param state
-     */
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<InventoryVendor[]>
-    {
-        return this._inventoryService.getVendors();
     }
 }

@@ -17,6 +17,7 @@ import { SharedModule } from 'app/shared/shared.module';
 import { InventoryComponent } from 'app/modules/dashboard/manage-hall/add-goods/inventory/inventory.component';
 import { InventoryListComponent } from 'app/modules/dashboard/manage-hall/add-goods/inventory/list/inventory.component';
 import { ecommerceRoutes } from 'app/modules/dashboard/manage-hall/add-goods/ecommerce.routing';
+import { TranslocoModule } from '@ngneat/transloco';
 
 @NgModule({
     declarations: [
@@ -38,6 +39,7 @@ import { ecommerceRoutes } from 'app/modules/dashboard/manage-hall/add-goods/eco
         MatSelectModule,
         MatSlideToggleModule,
         MatTooltipModule,
+        TranslocoModule,
         SharedModule
     ]
 })

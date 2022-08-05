@@ -21,7 +21,7 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 title: 'Hallhouse',
                 type : 'basic',
                 link : '/apps/add-hall/hall',
-                icon    : 'mat_outline:storefront',
+                icon    : 'mat_outline:add_business',
             },
             {
                 id   : 'apps.contacts',
@@ -44,14 +44,14 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 title: 'Goods',
                 type : 'basic',
                 link : 'store/add-goods/goods',
-                icon    : 'mat_outline:storefront',
+                icon    : 'mat_outline:add_box',
             },
             {
                 id   : 'store.output-goods.out-goods',
                 title: 'Out-Goods',
                 type : 'basic',
                 link : 'store/output-goods/out-goods',
-                icon    : 'mat_outline:storefront',
+                icon    : 'feather:shopping-bag',
             }
         ]
     },
@@ -67,14 +67,14 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 title: 'Goods',
                 type : 'basic',
                 link : 'hall/add-goods/goods-hall',
-                icon    : 'mat_outline:storefront',
+                icon    : 'mat_outline:add_box',
             },
             {
                 id   : 'hall.output-goods.output',
                 title: 'Out-Goods',
                 type : 'basic',
                 link : 'hall/output-goods/output',
-                icon    : 'mat_outline:storefront',
+                icon    : 'feather:shopping-bag'
 
             },
             {
@@ -82,21 +82,21 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 title: 'Order',
                 type : 'basic',
                 link : 'hall/add-order/order',
-                icon    : 'mat_outline:storefront',
+                icon    :'mat_outline:reorder',
             },
             {
                 id   : 'hall.add-scal.scal',
                 title: 'Scal',
                 type : 'basic',
                 link : 'hall/add-scal/scal',
-                icon    : 'mat_outline:storefront',
+                icon    : 'auto_awesome_motion',
             },
             {
                 id   : 'hall.incomplete-goods.incomplete',
                 title: 'Incomplete',
                 type : 'basic',
                 link : 'hall/incomplete-goods/incomplete',
-                icon    : 'mat_outline:storefront',
+                icon    : 'border_color',
             }
         ]
     },
