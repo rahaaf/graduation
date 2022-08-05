@@ -32,7 +32,7 @@ export const defaultNavigation: FuseNavigationItem[] = [
             },
         ]
     },
-    {
+     {
         id      : 'store',
         title   : 'Manage-store',
         subtitle: 'Manage-store permissions',

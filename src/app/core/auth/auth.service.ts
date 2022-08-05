@@ -31,6 +31,7 @@ export class AuthService
         localStorage.setItem('accessToken', token);
     }
 
+    // eslint-disable-next-line @typescript-eslint/member-ordering
     get accessToken(): string
     {
         return localStorage.getItem('accessToken') ?? '';

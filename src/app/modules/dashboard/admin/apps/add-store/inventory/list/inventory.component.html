@@ -95,7 +95,7 @@
                                     </div>
 
                                     <!-- address -->
-                                    <div class="hidden lg:flex items-center">
+                                    <div class="hidden lg:flex items-center truncate">
                                         <div class="min-w-4">{{product.address}}</div>
                                     </div>
 
@@ -172,7 +172,7 @@
                                                 <mat-label>{{('Governorate'|transloco)}}</mat-label>
                                                 <mat-select [formControlName]="'governorate'">
                                                     <ng-container *ngFor="let category of governorate">
-                                                        <mat-option [value]="category.id">
+                                                        <mat-option [value]="category.name">
                                                             {{category.name}}
                                                         </mat-option>
                                                     </ng-container>
@@ -182,7 +182,7 @@
                                                 <mat-label>{{('Manager'|transloco)}}</mat-label>
                                                 <mat-select [formControlName]="'contact'">
                                                     <ng-container *ngFor="let item of contactes">
-                                                        <mat-option [value]="item.id">
+                                                        <mat-option [value]="item.name">
                                                             {{item.name}}
                                                         </mat-option>
                                                     </ng-container>
